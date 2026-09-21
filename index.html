@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zheka Hubs</title>
+    <!-- Подключаем красивый прописной шрифт для неона -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        /* Общие настройки - Тёмная тема */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- ШАПКА САЙТА (HEADER) --- */
+        .header-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        /* Картинка из аниме 86 */
+        .header-bg {
+            width: 100%;
+            height: auto;
+            max-height: 350px;
+            object-fit: cover;
+            display: block;
+            opacity: 0.7; /* Легкое затемнение, чтобы текст горел ярче */
+        }
+
+        /* Прописные буквы с переливающейся неоновой подсветкой */
+        .neon-text {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            font-family: 'Caveat', cursive;
+            font-size: 2.8rem;
+            color: #ffffff;
+            margin: 0;
+            animation: neonPulse 3s ease-in-out infinite alternate;
+            z-index: 10;
+        }
+
+        /* Безопасная для смартфона анимация неона */
+        @keyframes neonPulse {
+            0% {
+                text-shadow: 0 0 4px #fff, 0 0 10px #00d2ff, 0 0 20px #00d2ff, 0 0 30px #0086ad;
+            }
+            100% {
+                text-shadow: 0 0 2px #fff, 0 0 6px #00bcff, 0 0 14px #0077ff, 0 0 25px #0044ff;
+            }
+        }
+
+        /* Основной контейнер: меню + контент */
+        .main-wrapper {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* --- КНОПКА МЕНЮ ДЛЯ ТЕЛЕФОНА (ТРИ ПОЛОСКИ) --- */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #00d2ff;
+            color: #121212;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 100;
+            font-weight: bold;
+        }
+
+        /* --- БОКОВАЯ ПАНЕЛЬ (МЕНЮ) --- */
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-right: 1px solid #2d2d2d;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar h3 {
+            color: #00d2ff;
+            margin-top: 0;
+            border-bottom: 1px solid #2d2d2d;
+            padding-bottom: 10px;
+        }
+
+        .sidebar button {
+            display: block;
+            width: 100%;
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            text-align: left;
+            padding: 12px 10px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar button:hover, .sidebar button.active {
+            background-color: #2d2d2d;
+            color: #00d2ff;
+        }
+
+        /* --- ЦЕНТРАЛЬНЫЙ КОНТЕНТ --- */
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            background-color: #121212;
+        }
+
+        .page-section {
+            display: none; /* Прячем все разделы по умолчанию */
+        }
+
+        .page-section.active {
+            display: block; /* Показываем только активный */
+        }
+
+        /* --- РАЗДЕЛ PHOTOS И VIDEO (СЕТКА С КАРТОЧКАМИ) --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .grid-card {
+            background-color: #1a1a1a;
+            border: 1px solid #2d2d2d;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .grid-card:hover {
+            transform: translateY(-3px);
+            border-color: #00d2ff;
+        }
+
+        .card-box {
+            width: 60px;
+            height: 60px;
+            background-color: #2d2d2d;
+            margin: 0 auto 10px auto;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00d2ff;
+            font-size: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            color: #ffffff;
+        }
+
+        /* Место для открытия фото на этой же странице */
+        .viewer-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            border: 1px dashed #2d2d2d;
+            text-align: center;
+            color: #888;
+        }
+
+        /* --- РАЗДЕЛ MUSIC (СПИСОК СВЕРХУ ВНИЗ) --- */
+        .music-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .track-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #2d2d2d;
+        }
+
+        .track-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .track-name {
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .track-artist {
+            font-size: 0.85rem;
+            color: #888888;
+        }
+
+        .play-btn {
+            background-color: #00d2ff;
+            border: none;
+            color: #121212;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* --- РАЗДЕЛ NOTES (ПРОСТОЕ ТЕКСТОВОЕ ПОЛЕ) --- */
+        .notes-area {
+            width: 100%;
+            height: 200px;
+            background-color: #1a1a1a;
+            border: 1px solid #2d2d2d;
+            border-radius: 6px;
+            color: #ffffff;
+            padding: 15px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            resize: none;
+        }
+
+        /* --- НИЗ СТРАНИЦЫ (FOOTER) --- */
+        footer {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #2d2d2d;
+            font-size: 0.9rem;
+            color: #888888;
+        }
+
+        footer .bible-quote {
+            font-style: italic;
+            color: #00d2ff;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        /* --- АДАПТИВНОСТЬ ПОД СМАРТФОН REDMI --- */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block; /* Показываем кнопку "три полоски" */
+            }
+
+            .main-wrapper {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 90;
+                transform: translateX(-100%); /* Прячем меню за экран */
+                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            }
+
+            /* Когда меню открыто кнопкой */
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content-area {
+                padding: 20px;
+                padding-top: 40px;
+            }
+
+            .neon-text {
+                font-size: 1.9rem; /* Чуть меньше шрифт на телефоне, чтоб не вылезал */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка сайта -->
+    <div class="header-container">
+        <!-- Твоя картинка (замени 'anime-86.jpg' на реальное имя файла, когда загрузишь его в репозиторий) -->
+        <img src="anime-86.jpg" alt="Zheka Hubs Space" class="header-bg">
+        <h1 class="neon-text">Zheka Hubs</h1>
+    </div>
+
+    <!-- Кнопка три полоски для мобилы -->
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+    <!-- Главный блок -->
+    <div class="main-wrapper">
+        
+        <!-- Меню (На ПК слева, на мобиле прячется) -->
+        <div class="sidebar" id="sidebarMenu">
+            <h3>Navigation</h3>
+            <button class="nav-btn active" onclick="showSection('photos', this)">Photos</button>
+            <button class="nav-btn" onclick="showSection('music', this)">Music</button>
+            <button class="nav-btn" onclick="showSection('video', this)">Video</button>
+            <button class="nav-btn" onclick="showSection('notes', this)">Notes</button>
+            <button class="nav-btn" onclick="showSection('blog', this)">Blog</button>
+        </div>
+
+        <!-- Контентная зона -->
+        <div class="content-area">
+            
+            <!-- РАЗДЕЛ PHOTOS -->
+            <div id="photos" class="page-section active">
+                <h2>Photos</h2>
+                <div class="grid-container">
+                    <div class="grid-card" onclick="openAlbum('My Photos')">
+                        <div class="card-box">📁</div>
+                        <div class="card-title">My Photos</div>
+                    </div>
+                    <div class="grid-card" onclick="openAlbum('Images')">
+                        <div class="card-box">📁</div>
+                        <div class="card-title">Images</div>
+                    </div>
+                    <div class="grid-card" onclick="openAlbum('Others')">
+  
