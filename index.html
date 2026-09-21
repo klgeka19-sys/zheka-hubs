@@ -25,19 +25,17 @@
         .hero-banner {
             position: relative;
             width: 100%;
-            height: 45vh; /* На мобильных займет почти пол-экрана, на ПК подстроится */
+            height: 45vh;
             min-height: 280px;
             max-height: 500px;
-            /* ВАЖНО: Замените 'banner.jpg' на точное имя файла картинки на вашем GitHub */
             background: linear-gradient(to bottom, rgba(0,0,0,0.2), #121212), url('banner.jpg') no-repeat center center;
             background-size: cover;
             display: flex;
             align-items: flex-end;
             padding: 20px;
-            width: 100%;
         }
 
-        /* Контейнер для текста и меню поверх баннера */
+        /* Контейнер для текста поверх баннера */
         .banner-content {
             display: flex;
             justify-content: space-between;
@@ -56,7 +54,7 @@
             text-shadow: 0 0 10px #00bcff, 0 0 20px #00bcff, 0 0 30px #00bcff;
         }
 
-        /* Кнопка бургер-меню */
+        /* Кнопка меню */
         .menu-btn {
             background: rgba(0, 188, 255, 0.85);
             border: none;
@@ -70,11 +68,6 @@
             align-items: center;
             gap: 5px;
             box-shadow: 0 0 15px rgba(0, 188, 255, 0.4);
-            transition: background 0.2s;
-        }
-
-        .menu-btn:hover {
-            background: #00bcff;
         }
 
         .menu-btn span {
@@ -85,7 +78,7 @@
             border-radius: 2px;
         }
 
-        /* Основной контент под шапкой */
+        /* Основной контент */
         .main-content {
             max-width: 800px;
             width: 100%;
@@ -102,7 +95,7 @@
         /* Сетка альбомов (папок) */
         .albums-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -122,11 +115,9 @@
             gap: 10px;
         }
 
-        .album-card:hover, .album-card.active {
+        .album-card:active {
             background: #252525;
             border-color: #00bcff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 188, 255, 0.1);
         }
 
         .folder-icon {
@@ -134,7 +125,7 @@
             color: #ffca28;
         }
 
-        /* Подсказка пользователю */
+        /* Подсказка */
         .info-note {
             border: 1px dashed #444;
             padding: 15px;
@@ -145,7 +136,7 @@
             margin-bottom: 30px;
         }
 
-        /* Область отображения фотографий */
+        /* Галерея */
         .gallery-display {
             background: #1e1e1e;
             border-radius: 12px;
@@ -166,27 +157,22 @@
 
         .photos-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             gap: 12px;
         }
 
         .photos-list img {
             width: 100%;
-            height: 160px;
+            height: 150px;
             object-fit: cover;
             border-radius: 8px;
             background: #2a2a2a;
-            transition: transform 0.2s;
-        }
-
-        .photos-list img:hover {
-            transform: scale(1.03);
         }
     </style>
 </head>
 <body>
 
-    <!-- Шапка-баннер на всю ширину с вашей картинкой -->
+    <!-- Шапка-баннер с аниме -->
     <div class="hero-banner">
         <div class="banner-content">
             <span class="logo-text">Zheka Hubs</span>
@@ -198,21 +184,21 @@
         </div>
     </div>
 
-    <!-- Основной блок сайта -->
+    <!-- Основной блок -->
     <main class="main-content">
         <h2 class="section-title">Photos</h2>
 
-        <!-- Блок кликабельных папок -->
+        <!-- Папки -->
         <div class="albums-grid">
-            <div class="album-card" onclick="openAlbum('my-photos', event)">
+            <div class="album-card" onclick="openAlbum('my-photos')">
                 <div class="folder-icon">📁</div>
                 <div>My Photos</div>
             </div>
-            <div class="album-card" onclick="openAlbum('images', event)">
+            <div class="album-card" onclick="openAlbum('images')">
                 <div class="folder-icon">📁</div>
                 <div>Images</div>
             </div>
-            <div class="album-card" onclick="openAlbum('others', event)">
+            <div class="album-card" onclick="openAlbum('others')">
                 <div class="folder-icon">📁</div>
                 <div>Others</div>
             </div>
@@ -222,71 +208,48 @@
             Нажми на альбом, чтобы посмотреть фотографии ниже...
         </div>
 
-        <!-- Контейнер для выгрузки фото из папок -->
+        <!-- Галерея -->
         <div class="gallery-display" id="galleryDisplay">
             <h3 class="gallery-title" id="currentAlbumTitle">Альбом</h3>
-            <div class="photos-list" id="photosContainer">
-                <!-- Сюда JavaScript добавляет картинки -->
-            </div>
+            <div class="photos-list" id="photosContainer"></div>
         </div>
     </main>
 
     <script>
-        // СПИСОК ФАЙЛОВ ДЛЯ КАЖДОЙ ПАПКИ
-        // Впишите сюда точные названия картинок, которые вы загрузите в папки на GitHub
+        // Данные фоток
         const albumData = {
-            'my-photos': [
-                'my-photos/photo1.jpg',
-                'my-photos/photo2.jpg'
-            ],
-            'images': [
-                'images/pic1.jpg',
-                'images/pic2.jpg'
-            ],
-            'others': [
-                'others/file1.jpg'
-            ]
+            'my-photos': ['my-photos/photo1.jpg', 'my-photos/photo2.jpg'],
+            'images': ['images/pic1.jpg', 'images/pic2.jpg'],
+            'others': ['others/file1.jpg']
         };
 
-        function openAlbum(albumKey, event) {
+        function openAlbum(albumKey) {
             const display = document.getElementById('galleryDisplay');
             const title = document.getElementById('currentAlbumTitle');
             const container = document.getElementById('photosContainer');
             
-            // Снимаем выделение со всех папок и выделяем текущую
-            document.querySelectorAll('.album-card').forEach(card => card.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-
-            // Очищаем прошлые фотографии перед загрузкой новых
             container.innerHTML = '';
             
-            // Обновляем название открытого альбома
             const names = {'my-photos': 'My Photos', 'images': 'Images', 'others': 'Others'};
             title.textContent = names[albumKey];
 
-            // Берем массив фото
             const photos = albumData[albumKey] || [];
 
             if(photos.length === 0) {
-                container.innerHTML = '<p style="color: #666; grid-column: span 2;">В этой папке пока пусто...</p>';
+                container.innerHTML = '<p style="color: #666;">В этой папке пока пусто...</p>';
             } else {
-                // Создаем элементы картинок
                 photos.forEach(src => {
                     const img = document.createElement('img');
                     img.src = src;
                     img.alt = 'Photo';
-                    // Если файла нет на сервере, выведем аккуратную плашку
                     img.onerror = function() {
-                        this.style.display = 'none'; 
+                        this.src = 'https://placeholder.com';
                     };
                     container.appendChild(img);
                 });
             }
 
-            // Показываем блок с галереей
             display.classList.add('visible');
-            
-            // Плавно прокручиваем страницу вниз к фотографиям
             display.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
