@@ -19,6 +19,7 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* Большой адаптивный баннер в шапке сайта */
@@ -35,7 +36,6 @@
             padding: 20px;
         }
 
-        /* Контейнер для текста поверх баннера */
         .banner-content {
             display: flex;
             justify-content: space-between;
@@ -54,7 +54,7 @@
             text-shadow: 0 0 10px #00bcff, 0 0 20px #00bcff, 0 0 30px #00bcff;
         }
 
-        /* Кнопка меню */
+        /* Синяя кнопка меню (три полоски) */
         .menu-btn {
             background: rgba(0, 188, 255, 0.85);
             border: none;
@@ -68,6 +68,7 @@
             align-items: center;
             gap: 5px;
             box-shadow: 0 0 15px rgba(0, 188, 255, 0.4);
+            z-index: 100; /* Чтобы быть поверх баннера */
         }
 
         .menu-btn span {
@@ -78,7 +79,83 @@
             border-radius: 2px;
         }
 
-        /* Основной контент */
+        /* ВЫЕЗЖАЮЩЕЕ БОКОВОЕ МЕНЮ (ШТОРКА) */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -280px; /* Изначально спрятано за экраном справа */
+            width: 280px;
+            height: 100vh;
+            background: #1a1a1a;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s ease;
+            z-index: 999;
+            padding: 80px 20px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            border-left: 2px solid #00bcff;
+        }
+
+        /* Класс, который активируется через JS при клике */
+        .side-menu.open {
+            right: 0;
+        }
+
+        /* Кнопка закрытия внутри шторки */
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        /* Пункты меню */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            background: #242424;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 500;
+            transition: background 0.2s, color 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:active, .menu-item.active {
+            background: #2a2a2a;
+            border-color: #00bcff;
+            color: #00bcff;
+        }
+
+        .menu-item-icon {
+            font-size: 22px;
+        }
+
+        /* Темная подложка-затемнение при открытии меню */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 998;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Основной контент сайта */
         .main-content {
             max-width: 800px;
             width: 100%;
@@ -92,61 +169,13 @@
             padding-left: 10px;
         }
 
-        /* Сетка альбомов (папок) */
-        .albums-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        /* Карточки папок */
-        .album-card {
-            background: #1e1e1e;
-            border: 1px solid #2d2d2d;
-            border-radius: 12px;
-            padding: 25px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .album-card:active {
-            background: #252525;
-            border-color: #00bcff;
-        }
-
-        .folder-icon {
-            font-size: 45px;
-            color: #ffca28;
-        }
-
-        /* Подсказка */
-        .info-note {
-            border: 1px dashed #444;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        /* Галерея */
+        /* Область вывода фото/видео/музыки */
         .gallery-display {
             background: #1e1e1e;
             border-radius: 12px;
             padding: 20px;
-            display: none;
             border: 1px solid #2d2d2d;
-        }
-
-        .gallery-display.visible {
-            display: block;
+            margin-top: 10px;
         }
 
         .gallery-title {
@@ -172,11 +201,14 @@
 </head>
 <body>
 
+    <!-- Затемнение заднего фона при открытом меню -->
+    <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
     <!-- Шапка-баннер с аниме -->
     <div class="hero-banner">
         <div class="banner-content">
             <span class="logo-text">Zheka Hubs</span>
-            <button class="menu-btn" onclick="alert('Меню в разработке')">
+            <button class="menu-btn" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -184,74 +216,95 @@
         </div>
     </div>
 
-    <!-- Основной блок -->
+    <!-- ВЫЕЗЖАЮЩЕЕ БОКОВОЕ МЕНЮ -->
+    <div class="side-menu" id="sideMenu">
+        <button class="close-btn" onclick="toggleMenu()">×</button>
+        
+        <div class="menu-item active" onclick="changeCategory('my-photos', 'Фотографии')">
+            <span class="menu-item-icon">🖼️</span>
+            <span>Фото</span>
+        </div>
+        <div class="menu-item" onclick="changeCategory('videos', 'Видеозаписи')">
+            <span class="menu-item-icon">🎬</span>
+            <span>Видео</span>
+        </div>
+        <div class="menu-item" onclick="changeCategory('music', 'Музыка')">
+            <span class="menu-item-icon">🎵</span>
+            <span>Мьюзик</span>
+        </div>
+        <div class="menu-item" onclick="changeCategory('others', 'Разное')">
+            <span class="menu-item-icon">⚙️</span>
+            <span>Всё такое</span>
+        </div>
+    </div>
+
+    <!-- Основной блок сайта -->
     <main class="main-content">
-        <h2 class="section-title">Photos</h2>
+        <h2 class="section-title">Контент профиля</h2>
 
-        <!-- Папки -->
-        <div class="albums-grid">
-            <div class="album-card" onclick="openAlbum('my-photos')">
-                <div class="folder-icon">📁</div>
-                <div>My Photos</div>
-            </div>
-            <div class="album-card" onclick="openAlbum('images')">
-                <div class="folder-icon">📁</div>
-                <div>Images</div>
-            </div>
-            <div class="album-card" onclick="openAlbum('others')">
-                <div class="folder-icon">📁</div>
-                <div>Others</div>
-            </div>
-        </div>
-
-        <div class="info-note">
-            Нажми на альбом, чтобы посмотреть фотографии ниже...
-        </div>
-
-        <!-- Галерея -->
+        <!-- Галерея (динамически меняется контент) -->
         <div class="gallery-display" id="galleryDisplay">
-            <h3 class="gallery-title" id="currentAlbumTitle">Альбом</h3>
-            <div class="photos-list" id="photosContainer"></div>
+            <h3 class="gallery-title" id="currentAlbumTitle">Фотографии</h3>
+            <div class="photos-list" id="photosContainer">
+                <!-- По умолчанию показываем заглушку для Фото -->
+                <p style="color: #666;">В разделе «Фотографии» пока пусто...</p>
+            </div>
         </div>
     </main>
 
     <script>
-        // Данные фоток
-        const albumData = {
-            'my-photos': ['my-photos/photo1.jpg', 'my-photos/photo2.jpg'],
-            'images': ['images/pic1.jpg', 'images/pic2.jpg'],
-            'others': ['others/file1.jpg']
+        // Функция открытия/закрытия меню
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('menuOverlay');
+            menu.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // База данных контента для разделов шторки
+        const mediaData = {
+            'my-photos': ['my-photos/photo1.jpg'],
+            'videos': [], // Сюда потом вставим видео файлы
+            'music': [],  // Сюда треки
+            'others': []
         };
 
-        function openAlbum(albumKey) {
-            const display = document.getElementById('galleryDisplay');
+        // Функция переключения вкладок через боковую шторку
+        function changeCategory(key, displayName) {
             const title = document.getElementById('currentAlbumTitle');
             const container = document.getElementById('photosContainer');
             
+            // Подсвечиваем активный пункт в меню
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Закрываем меню после выбора (для мобилок удобно)
+            toggleMenu();
+
+            // Меняем заголовок главного блока
+            title.textContent = displayName;
             container.innerHTML = '';
-            
-            const names = {'my-photos': 'My Photos', 'images': 'Images', 'others': 'Others'};
-            title.textContent = names[albumKey];
 
-            const photos = albumData[albumKey] || [];
+            const items = mediaData[key] || [];
 
-            if(photos.length === 0) {
-                container.innerHTML = '<p style="color: #666;">В этой папке пока пусто...</p>';
+            if(items.length === 0) {
+                container.innerHTML = `<p style="color: #666;">В разделе «${displayName}» пока ничего нет...</p>`;
             } else {
-                photos.forEach(src => {
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.alt = 'Photo';
-                    img.onerror = function() {
-                        this.src = 'https://placeholder.com';
-                    };
-                    container.appendChild(img);
-                });
+                // Если это фото, генерируем картинки
+                if (key === 'my-photos') {
+                    items.forEach(src => {
+                        const img = document.createElement('img');
+                        img.src = src;
+                        img.alt = 'Media';
+                        img.onerror = function() {
+                            this.src = 'https://placeholder.com';
+                        };
+                        container.appendChild(img);
+                    });
+                }
             }
-
-            display.classList.add('visible');
-            display.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
-</html>
+    </html>
+    
