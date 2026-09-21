@@ -1,331 +1,294 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zheka Hubs</title>
-    <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
             background-color: #121212;
             color: #ffffff;
             display: flex;
             flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
-        /* ИСПРАВЛЕНО: Надежный контейнер для шапки */
-        .header-container {
+        /* Большой адаптивный баннер в шапке сайта */
+        .hero-banner {
             position: relative;
             width: 100%;
-            height: 180px; /* Фиксированная высота для телефона */
-            background-color: #1a1a1a;
-            overflow: hidden;
-        }
-
-        /* ИСПРАВЛЕНО: Картинка теперь не сжимает текст */
-        .header-bg {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            opacity: 0.6;
-        }
-
-        /* ИСПРАВЛЕНО: Неоновые буквы четко на своем месте */
-        .neon-text {
-            position: absolute;
-            top: 30px;
-            left: 20px;
-            font-family: 'Caveat', cursive;
-            font-size: 2.5rem;
-            color: #ffffff;
-            margin: 0;
-            white-space: nowrap;
-            animation: neonPulse 3s ease-in-out infinite alternate;
-            z-index: 10;
-        }
-
-        @keyframes neonPulse {
-            0% { text-shadow: 0 0 4px #fff, 0 0 10px #00d2ff, 0 0 20px #00d2ff; }
-            100% { text-shadow: 0 0 2px #fff, 0 0 6px #00bcff, 0 0 14px #0077ff; }
-        }
-
-        .main-wrapper {
+            height: 45vh; /* На мобильных займет почти пол-экрана, на ПК подстроится */
+            min-height: 280px;
+            max-height: 500px;
+            /* ВАЖНО: Замените 'banner.jpg' на точное имя файла картинки на вашем GitHub */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), #121212), url('banner.jpg') no-repeat center center;
+            background-size: cover;
             display: flex;
-            flex: 1;
-            position: relative;
-        }
-
-        /* ИСПРАВЛЕНО: Кнопка "три полоски" теперь не мешает шапке */
-        .menu-toggle {
-            display: none;
-            position: absolute;
-            top: 25px;
-            right: 20px;
-            background-color: #00d2ff;
-            color: #121212;
-            border: none;
-            padding: 10px 15px;
-            font-size: 1.5rem;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 100;
-        }
-
-        /* Боковое меню */
-        .sidebar {
-            width: 250px;
-            background-color: #1a1a1a;
+            align-items: flex-end;
             padding: 20px;
-            border-right: 1px solid #2d2d2d;
-            transition: transform 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .sidebar h3 {
-            color: #00d2ff;
-            margin-top: 0;
-            border-bottom: 1px solid #2d2d2d;
-            padding-bottom: 10px;
-        }
-
-        .sidebar button {
-            display: block;
             width: 100%;
-            background: none;
+        }
+
+        /* Контейнер для текста и меню поверх баннера */
+        .banner-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Неоновые буквы */
+        .logo-text {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            color: #fff;
+            text-shadow: 0 0 10px #00bcff, 0 0 20px #00bcff, 0 0 30px #00bcff;
+        }
+
+        /* Кнопка бургер-меню */
+        .menu-btn {
+            background: rgba(0, 188, 255, 0.85);
             border: none;
-            color: #aaaaaa;
-            text-align: left;
-            padding: 12px 10px;
-            font-size: 1.1rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
             cursor: pointer;
-            border-radius: 5px;
-            margin-bottom: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 0 15px rgba(0, 188, 255, 0.4);
+            transition: background 0.2s;
         }
 
-        .sidebar button:hover, .sidebar button.active {
-            background-color: #2d2d2d;
-            color: #00d2ff;
+        .menu-btn:hover {
+            background: #00bcff;
         }
 
-        /* Контентная зона */
-        .content-area {
-            flex: 1;
-            padding: 20px;
-            background-color: #121212;
-        }
-
-        .page-section {
-            display: none;
-        }
-
-        .page-section.active {
+        .menu-btn span {
             display: block;
+            width: 24px;
+            height: 3px;
+            background: #121212;
+            border-radius: 2px;
         }
 
-        /* Сетка папок */
-        .grid-container {
+        /* Основной контент под шапкой */
+        .main-content {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            border-left: 4px solid #00bcff;
+            padding-left: 10px;
+        }
+
+        /* Сетка альбомов (папок) */
+        .albums-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 20px;
         }
 
-        .grid-card {
-            background-color: #1a1a1a;
+        /* Карточки папок */
+        .album-card {
+            background: #1e1e1e;
             border: 1px solid #2d2d2d;
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 12px;
+            padding: 25px 15px;
             text-align: center;
             cursor: pointer;
-        }
-
-        .card-box {
-            width: 50px;
-            height: 50px;
-            background-color: #2d2d2d;
-            margin: 0 auto 10px auto;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #00d2ff;
-            font-size: 1.5rem;
-        }
-
-        .viewer-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #1a1a1a;
-            border-radius: 8px;
-            border: 1px dashed #2d2d2d;
-            text-align: center;
-            color: #888;
-        }
-
-        .music-list {
+            transition: all 0.2s ease;
             display: flex;
             flex-direction: column;
+            align-items: center;
             gap: 10px;
         }
 
-        .track-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #1a1a1a;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #2d2d2d;
+        .album-card:hover, .album-card.active {
+            background: #252525;
+            border-color: #00bcff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 188, 255, 0.1);
         }
 
-        .play-btn {
-            background-color: #00d2ff;
-            border: none;
-            color: #121212;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-weight: bold;
+        .folder-icon {
+            font-size: 45px;
+            color: #ffca28;
         }
 
-        .notes-area {
-            width: 100%;
-            height: 150px;
-            background-color: #1a1a1a;
-            border: 1px solid #2d2d2d;
-            border-radius: 6px;
-            color: #ffffff;
-            padding: 10px;
-            box-sizing: border-box;
-            resize: none;
-        }
-
-        footer {
-            background-color: #1a1a1a;
+        /* Подсказка пользователю */
+        .info-note {
+            border: 1px dashed #444;
             padding: 15px;
+            border-radius: 8px;
             text-align: center;
-            border-top: 1px solid #2d2d2d;
-            font-size: 0.85rem;
-            color: #888888;
-            margin-top: auto;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
         }
 
-        footer .bible-quote {
-            font-style: italic;
-            color: #00d2ff;
-            margin-bottom: 5px;
+        /* Область отображения фотографий */
+        .gallery-display {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 20px;
+            display: none;
+            border: 1px solid #2d2d2d;
         }
 
-        /* Адаптивность под телефон */
-        @media (max-width: 768px) {
-            .header-container {
-                height: 120px; /* Компактная шапка для мобилы */
-            }
+        .gallery-display.visible {
+            display: block;
+        }
 
-            .neon-text {
-                font-size: 1.8rem;
-                top: 40px;
-            }
+        .gallery-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #00bcff;
+        }
 
-            .menu-toggle {
-                display: block; /* Показываем три полоски */
-            }
+        .photos-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
 
-            .main-wrapper {
-                flex-direction: column;
-            }
+        .photos-list img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #2a2a2a;
+            transition: transform 0.2s;
+        }
 
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                z-index: 95;
-                transform: translateX(-100%);
-                box-shadow: 5px 0 15px rgba(0,0,0,0.7);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
+        .photos-list img:hover {
+            transform: scale(1.03);
         }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
-        <!-- Чтобы картинка появилась, нужно будет закинуть файл anime-86.jpg в твой репозиторий на GitHub -->
-        <img src="anime-86.jpg" alt="" class="header-bg">
-        <h1 class="neon-text">Zheka Hubs</h1>
-        <!-- ИСПРАВЛЕНО: Кнопка перенесена внутрь контейнера шапки -->
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <!-- Шапка-баннер на всю ширину с вашей картинкой -->
+    <div class="hero-banner">
+        <div class="banner-content">
+            <span class="logo-text">Zheka Hubs</span>
+            <button class="menu-btn" onclick="alert('Меню в разработке')">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </div>
 
-    <div class="main-wrapper">
-        <div class="sidebar" id="sidebarMenu">
-            <h3>Navigation</h3>
-            <button class="nav-btn active" onclick="showSection('photos', this)">Photos</button>
-            <button class="nav-btn" onclick="showSection('music', this)">Music</button>
-            <button class="nav-btn" onclick="showSection('video', this)">Video</button>
-            <button class="nav-btn" onclick="showSection('notes', this)">Notes</button>
-            <button class="nav-btn" onclick="showSection('blog', this)">Blog</button>
+    <!-- Основной блок сайта -->
+    <main class="main-content">
+        <h2 class="section-title">Photos</h2>
+
+        <!-- Блок кликабельных папок -->
+        <div class="albums-grid">
+            <div class="album-card" onclick="openAlbum('my-photos', event)">
+                <div class="folder-icon">📁</div>
+                <div>My Photos</div>
+            </div>
+            <div class="album-card" onclick="openAlbum('images', event)">
+                <div class="folder-icon">📁</div>
+                <div>Images</div>
+            </div>
+            <div class="album-card" onclick="openAlbum('others', event)">
+                <div class="folder-icon">📁</div>
+                <div>Others</div>
+            </div>
         </div>
 
-        <div class="content-area">
-            <!-- PHOTOS -->
-            <div id="photos" class="page-section active">
-                <h2>Photos</h2>
-                <div class="grid-container">
-                    <div class="grid-card" onclick="openAlbum('My Photos')">
-                        <div class="card-box">📁</div>
-                        <div>My Photos</div>
-                    </div>
-                    <div class="grid-card" onclick="openAlbum('Images')">
-                        <div class="card-box">📁</div>
-                        <div>Images</div>
-                    </div>
-                    <div class="grid-card" onclick="openAlbum('Others')">
-                        <div class="card-box">📁</div>
-                        <div>Others</div>
-                    </div>
-                </div>
-                <div class="viewer-box" id="photoViewer">Нажми на альбом, чтобы посмотреть фотографии ниже...</div>
-            </div>
+        <div class="info-note">
+            Нажми на альбом, чтобы посмотреть фотографии ниже...
+        </div>
 
-            <!-- MUSIC -->
-            <div id="music" class="page-section">
-                <h2>Music</h2>
-                <div class="music-list">
-                    <div class="track-item">
-                        <div>
-                            <div style="font-weight:bold;">Track Name 1</div>
-                            <div style="font-size:0.85rem;color:#888;">Artist 1</div>
-                        </div>
-                        <button class="play-btn">▶ Play</button>
-                    </div>
-                </div>
+        <!-- Контейнер для выгрузки фото из папок -->
+        <div class="gallery-display" id="galleryDisplay">
+            <h3 class="gallery-title" id="currentAlbumTitle">Альбом</h3>
+            <div class="photos-list" id="photosContainer">
+                <!-- Сюда JavaScript добавляет картинки -->
             </div>
+        </div>
+    </main>
 
-            <!-- VIDEO -->
-            <div id="video" class="page-section">
-                <h2>Video</h2>
-                <div class="grid-container">
-                    <div class="grid-card" onclick="openVideoAlbum('My Videos')">
-                        <div class="card-box">🎬</div>
-                        <div>My Videos</div>
-                    </div>
-                </div>
-                <div class="viewer-box" id="videoViewer">Нажми на альбом, чтобы посмотреть видео...</div>
-            </div>
+    <script>
+        // СПИСОК ФАЙЛОВ ДЛЯ КАЖДОЙ ПАПКИ
+        // Впишите сюда точные названия картинок, которые вы загрузите в папки на GitHub
+        const albumData = {
+            'my-photos': [
+                'my-photos/photo1.jpg',
+                'my-photos/photo2.jpg'
+            ],
+            'images': [
+                'images/pic1.jpg',
+                'images/pic2.jpg'
+            ],
+            'others': [
+                'others/file1.jpg'
+            ]
+        };
 
-            <!-- NOTES -->
-            <div id="notes" class="page-section">
-                <h2>Notes</h2>
-                <textarea class="notes-area" placeholder="Напиши сюда что-нибудь..."></textarea>
-            </div>
-
+        function openAlbum(albumKey, event) {
+            const display = document.getElementById('galleryDisplay');
+            const title = document.getElementById('currentAlbumTitle');
+            const container = document.getElementById('photosContainer');
             
+            // Снимаем выделение со всех папок и выделяем текущую
+            document.querySelectorAll('.album-card').forEach(card => card.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Очищаем прошлые фотографии перед загрузкой новых
+            container.innerHTML = '';
+            
+            // Обновляем название открытого альбома
+            const names = {'my-photos': 'My Photos', 'images': 'Images', 'others': 'Others'};
+            title.textContent = names[albumKey];
+
+            // Берем массив фото
+            const photos = albumData[albumKey] || [];
+
+            if(photos.length === 0) {
+                container.innerHTML = '<p style="color: #666; grid-column: span 2;">В этой папке пока пусто...</p>';
+            } else {
+                // Создаем элементы картинок
+                photos.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = 'Photo';
+                    // Если файла нет на сервере, выведем аккуратную плашку
+                    img.onerror = function() {
+                        this.style.display = 'none'; 
+                    };
+                    container.appendChild(img);
+                });
+            }
+
+            // Показываем блок с галереей
+            display.classList.add('visible');
+            
+            // Плавно прокручиваем страницу вниз к фотографиям
+            display.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
