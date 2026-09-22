@@ -308,52 +308,10 @@
             // =========================
             // МУЗЫКА (Добавили полноценный плеер!)
             // =========================
-            if (key === 'music') {
-                container.classList.add('no-grid'); // Чтобы плеер был по центру, а не в сетке для фото
-                
-                items.forEach(trackName => {
-                    // Создаем карточку трека
-                    const trackCard = document.createElement('div');
-                    trackCard.style.cssText = 'background: #222; padding: 20px; border-radius: 10px; text-align: center; margin: 20px auto; max-width: 90%; box-shadow: 0 4px 10px rgba(0,0,0,0.5);';
-
-                    // Название песни
-                    const titleElement = document.createElement('p');
-                    titleElement.textContent = trackName.replace('.mp3', '');
-                    titleElement.style.cssText = 'color: #fff; font-weight: bold; margin-bottom: 15px; font-size: 16px;';
-                    trackCard.appendChild(titleElement);
-
-                    // Сам аудио-плеер (скрытый элемент управления)
-                    const audio = document.createElement('audio');
-                    audio.src = encodeURIComponent(trackName); // Защита от пробелов в названии файла
-                    trackCard.appendChild(audio);
-
-                    // Кнопка Включения / Паузы
-                    const playBtn = document.createElement('button');
-                    playBtn.textContent = '▶ Воспроизвести';
-                    playBtn.style.cssText = 'background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 15px; cursor: pointer; width: 100%; transition: 0.2s;';
-                    
-                    // Логика работы кнопки плеера
-                    playBtn.addEventListener('click', () => {
-                        if (audio.paused) {
-                            // Останавливаем все другие аудио на странице, если они есть
-                            document.querySelectorAll('audio').forEach(a => a.pause());
-                            document.querySelectorAll('button').forEach(b => { if(b.textContent.includes('⏸')) b.textContent = '▶ Воспроизвести'; });
-                            
-                            audio.play();
-                            playBtn.textContent = '⏸ Пауза';
-                            playBtn.style.background = '#dc3545'; // Меняем цвет на красный при паузе
-                        } else {
-                            audio.pause();
-                            playBtn.textContent = '▶ Воспроизвести';
-                            playBtn.style.background = '#007bff';
-                        }
-                    });
-
-                    trackCard.appendChild(playBtn);
-                    container.appendChild(trackCard);
-                });
-                return;
-            }
-        }
-    </script>
-    
+              if (key === 'music') {
+    // Временная заглушка, чтобы код не ломался и меню работало
+    console.log('Раздел музыки загружен');
+  }
+});
+</return>; // или просто закройте ваш скрипт, если return был внутри функции
+</script>
