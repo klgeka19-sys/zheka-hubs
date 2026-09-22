@@ -292,71 +292,7 @@
     </main>
 
     <script>
-        // Открытие / закрытие меню
-        function toggleMenu() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('menuOverlay');
-            
-            if (menu && overlay) {
-                menu.classList.toggle('open');
-                overlay.classList.toggle('active');
-            }
-        }
-
-        // База данных контента
-        const mediaData = {
-            'my-photos': [
-                'my-photos/photo1.jpg'
-            ],
-            'videos': [],
-            'music': [
-                'Simon Curtis- Superhero.mp3'
-            ],
-            'others': []
-        };
-
-        // Переключение разделов
-        function changeCategory(key, displayName) {
-            const title = document.getElementById('currentAlbumTitle');
-            const container = document.getElementById('photosContainer');
-
-            // Подсвечиваем выбранный пункт через ID элементов
-            document
-                .querySelectorAll('.menu-item')
-                .forEach(item => item.classList.remove('active'));
-
-            const clickedItem = document.getElementById('btn-' + key);
-            if (clickedItem) {
-                clickedItem.classList.add('active');
-            }
-
-            // Закрываем меню безопасности ради, только если оно открыто
-            const menu = document.getElementById('sideMenu');
-            if (menu && menu.classList.contains('open')) {
-                toggleMenu();
-            }
-
-            // Меняем заголовок и чистим контейнер
-            if (title) title.textContent = displayName;
-            if (container) {
-                container.innerHTML = '';
-                container.classList.remove('no-grid');
-            } else {
-                return;
-            }
-
-            const items = mediaData[key] || [];
-
-            // Если раздел пуст
-            if (items.length === 0) {
-                container.innerHTML =
-                    `<p style="color: #666;">
-                        В разделе «${displayName}» пока ничего нет...
-                    </p>`;
-                return;
-            }
-
-            // =========================
+                    // =========================
             // ФОТО
             // =========================
             if (key === 'my-photos') {
@@ -364,4 +300,60 @@
                     const img = document.createElement('img');
                     img.src = src;
                     img.alt = 'Media';
-        
+                    container.appendChild(img);
+                });
+                return;
+            }
+
+            // =========================
+            // МУЗЫКА (Добавили полноценный плеер!)
+            // =========================
+            if (key === 'music') {
+                container.classList.add('no-grid'); // Чтобы плеер был по центру, а не в сетке для фото
+                
+                items.forEach(trackName => {
+                    // Создаем карточку трека
+                    const trackCard = document.createElement('div');
+                    trackCard.style.cssText = 'background: #222; padding: 20px; border-radius: 10px; text-align: center; margin: 20px auto; max-width: 90%; box-shadow: 0 4px 10px rgba(0,0,0,0.5);';
+
+                    // Название песни
+                    const titleElement = document.createElement('p');
+                    titleElement.textContent = trackName.replace('.mp3', '');
+                    titleElement.style.cssText = 'color: #fff; font-weight: bold; margin-bottom: 15px; font-size: 16px;';
+                    trackCard.appendChild(titleElement);
+
+                    // Сам аудио-плеер (скрытый элемент управления)
+                    const audio = document.createElement('audio');
+                    audio.src = encodeURIComponent(trackName); // Защита от пробелов в названии файла
+                    trackCard.appendChild(audio);
+
+                    // Кнопка Включения / Паузы
+                    const playBtn = document.createElement('button');
+                    playBtn.textContent = '▶ Воспроизвести';
+                    playBtn.style.cssText = 'background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 15px; cursor: pointer; width: 100%; transition: 0.2s;';
+                    
+                    // Логика работы кнопки плеера
+                    playBtn.addEventListener('click', () => {
+                        if (audio.paused) {
+                            // Останавливаем все другие аудио на странице, если они есть
+                            document.querySelectorAll('audio').forEach(a => a.pause());
+                            document.querySelectorAll('button').forEach(b => { if(b.textContent.includes('⏸')) b.textContent = '▶ Воспроизвести'; });
+                            
+                            audio.play();
+                            playBtn.textContent = '⏸ Пауза';
+                            playBtn.style.background = '#dc3545'; // Меняем цвет на красный при паузе
+                        } else {
+                            audio.pause();
+                            playBtn.textContent = '▶ Воспроизвести';
+                            playBtn.style.background = '#007bff';
+                        }
+                    });
+
+                    trackCard.appendChild(playBtn);
+                    container.appendChild(trackCard);
+                });
+                return;
+            }
+        }
+    </script>
+    
