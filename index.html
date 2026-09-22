@@ -308,10 +308,12 @@
             // =========================
             // МУЗЫКА (Добавили полноценный плеер!)
             // =========================
-              if (key === 'music') {
-    // Временная заглушка, чтобы код не ломался и меню работало
-    console.log('Раздел музыки загружен');
+                if (key === 'music') {
+    // Создаем плеер для песни Superhero
+    const audio = document.createElement('audio');
+    audio.src = 'Simon Curtis - Superhero.mp3'; 
+    audio.controls = true;
+    container.appendChild(audio);
   }
 });
-</return>; // или просто закройте ваш скрипт, если return был внутри функции
 </script>
