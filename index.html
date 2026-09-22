@@ -185,7 +185,6 @@
             gap: 12px;
         }
 
-        /* Класс, который будет отключать сетку, когда мы открываем плеер */
         .photos-list.no-grid {
             display: block;
         }
@@ -224,7 +223,7 @@
 
 <body>
 
-    <!-- Затемнение заднего фона при открытом меню -->
+    <!-- Затемнение заднего фона -->
     <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
     <!-- Шапка -->
@@ -245,26 +244,26 @@
 
         <button class="close-btn" onclick="toggleMenu()">×</button>
 
-        <div class="menu-item active"
-             onclick="changeCategory(event, 'my-photos', 'Фотографии')">
+        <div class="menu-item active" id="btn-my-photos"
+             onclick="changeCategory('my-photos', 'Фотографии')">
             <span class="menu-item-icon">🖼️</span>
             <span>Фото</span>
         </div>
 
-        <div class="menu-item"
-             onclick="changeCategory(event, 'videos', 'Видеозаписи')">
+        <div class="menu-item" id="btn-videos"
+             onclick="changeCategory('videos', 'Видеозаписи')">
             <span class="menu-item-icon">🎬</span>
             <span>Видео</span>
         </div>
 
-        <div class="menu-item"
-             onclick="changeCategory(event, 'music', 'Музыка')">
+        <div class="menu-item" id="btn-music"
+             onclick="changeCategory('music', 'Музыка')">
             <span class="menu-item-icon">🎵</span>
             <span>Мьюзик</span>
         </div>
 
-        <div class="menu-item"
-             onclick="changeCategory(event, 'others', 'Разное')">
+        <div class="menu-item" id="btn-others"
+             onclick="changeCategory('others', 'Разное')">
             <span class="menu-item-icon">⚙️</span>
             <span>Всё такое</span>
         </div>
@@ -283,11 +282,9 @@
             </h3>
 
             <div class="photos-list" id="photosContainer">
-
                 <p style="color: #666;">
                     В разделе «Фотографии» пока пусто...
                 </p>
-
             </div>
 
         </div>
@@ -295,16 +292,16 @@
     </main>
 
     <script>
-
         // Открытие / закрытие меню
         function toggleMenu() {
             const menu = document.getElementById('sideMenu');
             const overlay = document.getElementById('menuOverlay');
-
-            menu.classList.toggle('open');
-            overlay.classList.toggle('active');
+            
+            if (menu && overlay) {
+                menu.classList.toggle('open');
+                overlay.classList.toggle('active');
+            }
         }
-
 
         // База данных контента
         const mediaData = {
@@ -318,34 +315,35 @@
             'others': []
         };
 
-
         // Переключение разделов
-        function changeCategory(e, key, displayName) {
+        function changeCategory(key, displayName) {
             const title = document.getElementById('currentAlbumTitle');
             const container = document.getElementById('photosContainer');
 
-            // Подсвечиваем выбранный пункт
+            // Подсвечиваем выбранный пункт через ID элементов
             document
                 .querySelectorAll('.menu-item')
                 .forEach(item => item.classList.remove('active'));
 
-            // Определяем нажатый пункт меню через переданное событие
-            const clickedItem = e.currentTarget;
+            const clickedItem = document.getElementById('btn-' + key);
             if (clickedItem) {
                 clickedItem.classList.add('active');
             }
 
-            // Закрываем меню
-            toggleMenu();
+            // Закрываем меню безопасности ради, только если оно открыто
+            const menu = document.getElementById('sideMenu');
+            if (menu && menu.classList.contains('open')) {
+                toggleMenu();
+            }
 
-            // Меняем заголовок
-            title.textContent = displayName;
-
-            // Очищаем содержимое
-            container.innerHTML = '';
-
-            // Сбрасываем специальный класс разметки плеера
-            container.classList.remove('no-grid');
+            // Меняем заголовок и чистим контейнер
+            if (title) title.textContent = displayName;
+            if (container) {
+                container.innerHTML = '';
+                container.classList.remove('no-grid');
+            } else {
+                return;
+            }
 
             const items = mediaData[key] || [];
 
@@ -358,7 +356,6 @@
                 return;
             }
 
-
             // =========================
             // ФОТО
             // =========================
@@ -367,7 +364,4 @@
                     const img = document.createElement('img');
                     img.src = src;
                     img.alt = 'Media';
-                    img.onerror = function() {
-                        this.style.display = 'none';
-                    };
         
