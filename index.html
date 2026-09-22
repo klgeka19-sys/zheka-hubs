@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zheka Hubs</title>
+
     <style>
         * {
             box-sizing: border-box;
@@ -22,14 +23,14 @@
             overflow-x: hidden;
         }
 
-        /* Большой адаптивный баннер в шапке сайта */
         .hero-banner {
             position: relative;
             width: 100%;
             height: 45vh;
             min-height: 280px;
             max-height: 500px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), #121212), url('banner.jpg') no-repeat center center;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), #121212),
+                        url('banner.jpg') no-repeat center center;
             background-size: cover;
             display: flex;
             align-items: flex-end;
@@ -45,16 +46,16 @@
             margin: 0 auto;
         }
 
-        /* Неоновые буквы */
         .logo-text {
             font-size: 32px;
             font-weight: bold;
             font-family: 'Courier New', Courier, monospace;
             color: #fff;
-            text-shadow: 0 0 10px #00bcff, 0 0 20px #00bcff, 0 0 30px #00bcff;
+            text-shadow: 0 0 10px #00bcff,
+                         0 0 20px #00bcff,
+                         0 0 30px #00bcff;
         }
 
-        /* Синяя кнопка меню (три полоски) */
         .menu-btn {
             background: rgba(0, 188, 255, 0.85);
             border: none;
@@ -68,7 +69,7 @@
             align-items: center;
             gap: 5px;
             box-shadow: 0 0 15px rgba(0, 188, 255, 0.4);
-            z-index: 100; /* Чтобы быть поверх баннера */
+            z-index: 100;
         }
 
         .menu-btn span {
@@ -79,11 +80,10 @@
             border-radius: 2px;
         }
 
-        /* ВЫЕЗЖАЮЩЕЕ БОКОВОЕ МЕНЮ (ШТОРКА) */
         .side-menu {
             position: fixed;
             top: 0;
-            right: -280px; /* Изначально спрятано за экраном справа */
+            right: -280px;
             width: 280px;
             height: 100vh;
             background: #1a1a1a;
@@ -97,12 +97,10 @@
             border-left: 2px solid #00bcff;
         }
 
-        /* Класс, который активируется через JS при клике */
         .side-menu.open {
             right: 0;
         }
 
-        /* Кнопка закрытия внутри шторки */
         .close-btn {
             position: absolute;
             top: 20px;
@@ -114,7 +112,6 @@
             cursor: pointer;
         }
 
-        /* Пункты меню */
         .menu-item {
             display: flex;
             align-items: center;
@@ -129,7 +126,8 @@
             border: 1px solid transparent;
         }
 
-        .menu-item:active, .menu-item.active {
+        .menu-item:active,
+        .menu-item.active {
             background: #2a2a2a;
             border-color: #00bcff;
             color: #00bcff;
@@ -139,7 +137,6 @@
             font-size: 22px;
         }
 
-        /* Темная подложка-затемнение при открытии меню */
         .overlay {
             position: fixed;
             top: 0;
@@ -155,7 +152,6 @@
             display: block;
         }
 
-        /* Основной контент сайта */
         .main-content {
             max-width: 800px;
             width: 100%;
@@ -169,7 +165,6 @@
             padding-left: 10px;
         }
 
-        /* Область вывода фото/видео/музыки */
         .gallery-display {
             background: #1e1e1e;
             border-radius: 12px;
@@ -197,17 +192,38 @@
             border-radius: 8px;
             background: #2a2a2a;
         }
+
+        /* Музыкальный плеер */
+        .music-player {
+            width: 100%;
+            background: #242424;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #333;
+        }
+
+        .music-name {
+            color: #ffffff;
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .music-player audio {
+            width: 100%;
+        }
     </style>
 </head>
+
 <body>
 
     <!-- Затемнение заднего фона при открытом меню -->
     <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
 
-    <!-- Шапка-баннер с аниме -->
+    <!-- Шапка -->
     <div class="hero-banner">
         <div class="banner-content">
             <span class="logo-text">Zheka Hubs</span>
+
             <button class="menu-btn" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
@@ -216,95 +232,216 @@
         </div>
     </div>
 
-    <!-- ВЫЕЗЖАЮЩЕЕ БОКОВОЕ МЕНЮ -->
+    <!-- Боковое меню -->
     <div class="side-menu" id="sideMenu">
+
         <button class="close-btn" onclick="toggleMenu()">×</button>
-        
-        <div class="menu-item active" onclick="changeCategory('my-photos', 'Фотографии')">
+
+        <div class="menu-item active"
+             onclick="changeCategory('my-photos', 'Фотографии')">
             <span class="menu-item-icon">🖼️</span>
             <span>Фото</span>
         </div>
-        <div class="menu-item" onclick="changeCategory('videos', 'Видеозаписи')">
+
+        <div class="menu-item"
+             onclick="changeCategory('videos', 'Видеозаписи')">
             <span class="menu-item-icon">🎬</span>
             <span>Видео</span>
         </div>
-        <div class="menu-item" onclick="changeCategory('music', 'Музыка')">
+
+        <div class="menu-item"
+             onclick="changeCategory('music', 'Музыка')">
             <span class="menu-item-icon">🎵</span>
             <span>Мьюзик</span>
         </div>
-        <div class="menu-item" onclick="changeCategory('others', 'Разное')">
+
+        <div class="menu-item"
+             onclick="changeCategory('others', 'Разное')">
             <span class="menu-item-icon">⚙️</span>
             <span>Всё такое</span>
         </div>
+
     </div>
 
     <!-- Основной блок сайта -->
     <main class="main-content">
+
         <h2 class="section-title">Контент профиля</h2>
 
-        <!-- Галерея (динамически меняется контент) -->
         <div class="gallery-display" id="galleryDisplay">
-            <h3 class="gallery-title" id="currentAlbumTitle">Фотографии</h3>
+
+            <h3 class="gallery-title" id="currentAlbumTitle">
+                Фотографии
+            </h3>
+
             <div class="photos-list" id="photosContainer">
-                <!-- По умолчанию показываем заглушку для Фото -->
-                <p style="color: #666;">В разделе «Фотографии» пока пусто...</p>
+
+                <p style="color: #666;">
+                    В разделе «Фотографии» пока пусто...
+                </p>
+
             </div>
+
         </div>
+
     </main>
 
     <script>
-        // Функция открытия/закрытия меню
+
+        // Открытие / закрытие меню
         function toggleMenu() {
+
             const menu = document.getElementById('sideMenu');
             const overlay = document.getElementById('menuOverlay');
+
             menu.classList.toggle('open');
             overlay.classList.toggle('active');
+
         }
 
-        // База данных контента для разделов шторки
+
+        // База данных контента
         const mediaData = {
-            'my-photos': ['my-photos/photo1.jpg'],
-            'videos': [], // Сюда потом вставим видео файлы
-            'music': ['Simon Curtis- Superhero.mp3'],  // Сюда треки
+
+            'my-photos': [
+                'my-photos/photo1.jpg'
+            ],
+
+            'videos': [],
+
+            'music': [
+                'Simon Curtis- Superhero.mp3'
+            ],
+
             'others': []
+
         };
 
-        // Функция переключения вкладок через боковую шторку
-        function changeCategory(key, displayName)
-            const title = document.getElementById('currentAlbumTitle');
-            const container = document.getElementById('photosContainer');
-            
-            // Подсвечиваем активный пункт в меню
-            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-            event.currentTarget.classList.add('active');
 
-            // Закрываем меню после выбора (для мобилок удобно)
+        // Переключение разделов
+        function changeCategory(key, displayName) {
+
+            const title =
+                document.getElementById('currentAlbumTitle');
+
+            const container =
+                document.getElementById('photosContainer');
+
+
+            // Подсвечиваем выбранный пункт
+            document
+                .querySelectorAll('.menu-item')
+                .forEach(item => item.classList.remove('active'));
+
+
+            // Определяем нажатый пункт меню
+            const clickedItem = event.currentTarget;
+
+            if (clickedItem) {
+                clickedItem.classList.add('active');
+            }
+
+
+            // Закрываем меню
             toggleMenu();
 
-            // Меняем заголовок главного блока
+
+            // Меняем заголовок
             title.textContent = displayName;
+
+
+            // Очищаем содержимое
             container.innerHTML = '';
+
 
             const items = mediaData[key] || [];
 
-            if(items.length === 0) {
-                container.innerHTML = `<p style="color: #666;">В разделе «${displayName}» пока ничего нет...</p>`;
-            } else {
-                // Если это фото, генерируем картинки
-                if (key === 'my-photos') {
-                    items.forEach(src => {
-                        const img = document.createElement('img');
-                        img.src = src;
-                        img.alt = 'Media';
-                        img.onerror = function() {
-                            this.src = 'https://placeholder.com';
-                        };
-                        container.appendChild(img);
-                    });
-                }
+
+            // Если раздел пуст
+            if (items.length === 0) {
+
+                container.innerHTML =
+                    `<p style="color: #666;">
+                        В разделе «${displayName}» пока ничего нет...
+                    </p>`;
+
+                return;
             }
+
+
+            // =========================
+            // ФОТО
+            // =========================
+
+            if (key === 'my-photos') {
+
+                items.forEach(src => {
+
+                    const img =
+                        document.createElement('img');
+
+                    img.src = src;
+                    img.alt = 'Media';
+
+                    img.onerror = function() {
+
+                        this.style.display = 'none';
+
+                    };
+
+                    container.appendChild(img);
+
+                });
+
+            }
+
+
+            // =========================
+            // МУЗЫКА
+            // =========================
+
+            else if (key === 'music') {
+
+                items.forEach(src => {
+
+                    const player =
+                        document.createElement('div');
+
+                    player.className = 'music-player';
+
+
+                    const name =
+                        document.createElement('div');
+
+                    name.className = 'music-name';
+
+                    name.textContent =
+                        '🎵 Simon Curtis — Superhero';
+
+
+                    const audio =
+                        document.createElement('audio');
+
+                    audio.controls = true;
+
+                    audio.preload = 'metadata';
+
+                    audio.src = src;
+
+
+                    player.appendChild(name);
+
+                    player.appendChild(audio);
+
+                    container.appendChild(player);
+
+                });
+
+            }
+
         }
+
     </script>
+
 </body>
-    </html>
-    
+</html>
