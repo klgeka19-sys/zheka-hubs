@@ -185,6 +185,11 @@
             gap: 12px;
         }
 
+        /* Класс, который будет отключать сетку, когда мы открываем плеер */
+        .photos-list.no-grid {
+            display: block;
+        }
+
         .photos-list img {
             width: 100%;
             height: 150px;
@@ -200,16 +205,19 @@
             border-radius: 10px;
             padding: 15px;
             border: 1px solid #333;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
         .music-name {
             color: #ffffff;
             font-size: 17px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 500;
         }
 
         .music-player audio {
             width: 100%;
+            display: block;
         }
     </style>
 </head>
@@ -238,25 +246,25 @@
         <button class="close-btn" onclick="toggleMenu()">×</button>
 
         <div class="menu-item active"
-             onclick="changeCategory('my-photos', 'Фотографии')">
+             onclick="changeCategory(event, 'my-photos', 'Фотографии')">
             <span class="menu-item-icon">🖼️</span>
             <span>Фото</span>
         </div>
 
         <div class="menu-item"
-             onclick="changeCategory('videos', 'Видеозаписи')">
+             onclick="changeCategory(event, 'videos', 'Видеозаписи')">
             <span class="menu-item-icon">🎬</span>
             <span>Видео</span>
         </div>
 
         <div class="menu-item"
-             onclick="changeCategory('music', 'Музыка')">
+             onclick="changeCategory(event, 'music', 'Музыка')">
             <span class="menu-item-icon">🎵</span>
             <span>Мьюзик</span>
         </div>
 
         <div class="menu-item"
-             onclick="changeCategory('others', 'Разное')">
+             onclick="changeCategory(event, 'others', 'Разное')">
             <span class="menu-item-icon">⚙️</span>
             <span>Всё такое</span>
         </div>
@@ -290,81 +298,63 @@
 
         // Открытие / закрытие меню
         function toggleMenu() {
-
             const menu = document.getElementById('sideMenu');
             const overlay = document.getElementById('menuOverlay');
 
             menu.classList.toggle('open');
             overlay.classList.toggle('active');
-
         }
 
 
         // База данных контента
         const mediaData = {
-
             'my-photos': [
                 'my-photos/photo1.jpg'
             ],
-
             'videos': [],
-
             'music': [
                 'Simon Curtis- Superhero.mp3'
             ],
-
             'others': []
-
         };
 
 
         // Переключение разделов
-        function changeCategory(key, displayName) {
-
-            const title =
-                document.getElementById('currentAlbumTitle');
-
-            const container =
-                document.getElementById('photosContainer');
-
+        function changeCategory(e, key, displayName) {
+            const title = document.getElementById('currentAlbumTitle');
+            const container = document.getElementById('photosContainer');
 
             // Подсвечиваем выбранный пункт
             document
                 .querySelectorAll('.menu-item')
                 .forEach(item => item.classList.remove('active'));
 
-
-            // Определяем нажатый пункт меню
-            const clickedItem = event.currentTarget;
-
+            // Определяем нажатый пункт меню через переданное событие
+            const clickedItem = e.currentTarget;
             if (clickedItem) {
                 clickedItem.classList.add('active');
             }
 
-
             // Закрываем меню
             toggleMenu();
-
 
             // Меняем заголовок
             title.textContent = displayName;
 
-
             // Очищаем содержимое
             container.innerHTML = '';
 
+            // Сбрасываем специальный класс разметки плеера
+            container.classList.remove('no-grid');
 
             const items = mediaData[key] || [];
 
-
             // Если раздел пуст
             if (items.length === 0) {
-
                 container.innerHTML =
                     `<p style="color: #666;">
                         В разделе «${displayName}» пока ничего нет...
                     </p>`;
-
                 return;
             }
 
@@ -372,76 +362,12 @@
             // =========================
             // ФОТО
             // =========================
-
             if (key === 'my-photos') {
-
                 items.forEach(src => {
-
-                    const img =
-                        document.createElement('img');
-
+                    const img = document.createElement('img');
                     img.src = src;
                     img.alt = 'Media';
-
                     img.onerror = function() {
-
                         this.style.display = 'none';
-
                     };
-
-                    container.appendChild(img);
-
-                });
-
-            }
-
-
-            // =========================
-            // МУЗЫКА
-            // =========================
-
-            else if (key === 'music') {
-
-                items.forEach(src => {
-
-                    const player =
-                        document.createElement('div');
-
-                    player.className = 'music-player';
-
-
-                    const name =
-                        document.createElement('div');
-
-                    name.className = 'music-name';
-
-                    name.textContent =
-                        '🎵 Simon Curtis — Superhero';
-
-
-                    const audio =
-                        document.createElement('audio');
-
-                    audio.controls = true;
-
-                    audio.preload = 'metadata';
-
-                    audio.src = src;
-
-
-                    player.appendChild(name);
-
-                    player.appendChild(audio);
-
-                    container.appendChild(player);
-
-                });
-
-            }
-
-        }
-
-    </script>
-
-</body>
-</html>
+        
