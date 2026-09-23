@@ -1,319 +1,545 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zheka Hubs</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<title>Zheka Hubs</title>
 
-        body {
-            background-color: #121212;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
 
-        .hero-banner {
-            position: relative;
-            width: 100%;
-            height: 45vh;
-            min-height: 280px;
-            max-height: 500px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), #121212),
-                        url('banner.jpg') no-repeat center center;
-            background-size: cover;
-            display: flex;
-            align-items: flex-end;
-            padding: 20px;
-        }
+body {
+    background: #0b0f17;
+    color: white;
+    min-height: 100vh;
+}
 
-        .banner-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
+/* ===== ШАПКА ===== */
 
-        .logo-text {
-            font-size: 32px;
-            font-weight: bold;
-            font-family: 'Courier New', Courier, monospace;
-            color: #fff;
-            text-shadow: 0 0 10px #00bcff,
-                         0 0 20px #00bcff,
-                         0 0 30px #00bcff;
-        }
+header {
+    height: 70px;
+    background: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid #263244;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 
-        .menu-btn {
-            background: rgba(0, 188, 255, 0.85);
-            border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            box-shadow: 0 0 15px rgba(0, 188, 255, 0.4);
-            z-index: 100;
-        }
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #4da3ff;
+}
 
-        .menu-btn span {
-            display: block;
-            width: 24px;
-            height: 3px;
-            background: #121212;
-            border-radius: 2px;
-        }
+.menu-button {
+    font-size: 28px;
+    cursor: pointer;
+    user-select: none;
+}
 
-        .side-menu {
-            position: fixed;
-            top: 0;
-            right: -280px;
-            width: 280px;
-            height: 100vh;
-            background: #1a1a1a;
-            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
-            transition: right 0.3s ease;
-            z-index: 999;
-            padding: 80px 20px 20px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            border-left: 2px solid #00bcff;
-        }
+/* ===== БОКОВОЕ МЕНЮ ===== */
 
-        .side-menu.open {
-            right: 0;
-        }
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -280px;
+    width: 280px;
+    height: 100%;
+    background: #111827;
+    padding: 80px 25px 25px;
+    transition: 0.3s;
+    z-index: 200;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.5);
+}
 
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 28px;
-            cursor: pointer;
-        }
+.side-menu.active {
+    right: 0;
+}
 
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 15px;
-            background: #242424;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: 500;
-            transition: background 0.2s, color 0.2s;
-            border: 1px solid transparent;
-        }
+.side-menu button {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 12px;
+    background: #1d2939;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 17px;
+    text-align: left;
+    cursor: pointer;
+}
 
-        .menu-item:active,
-        .menu-item.active {
-            background: #2a2a2a;
-            border-color: #00bcff;
-            color: #00bcff;
-        }
+.side-menu button:hover {
+    background: #263a55;
+}
 
-        .menu-item-icon {
-            font-size: 22px;
-        }
+/* ===== ОСНОВНАЯ ОБЛАСТЬ ===== */
 
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 998;
-        }
+main {
+    padding: 25px 15px 110px;
+    max-width: 900px;
+    margin: auto;
+}
 
-        .overlay.active {
-            display: block;
-        }
+.hero {
+    text-align: center;
+    padding: 35px 10px;
+}
 
-        .main-content {
-            max-width: 800px;
-            width: 100%;
-            padding: 20px;
-        }
+.hero h1 {
+    font-size: 38px;
+    margin-bottom: 12px;
+    color: #4da3ff;
+}
 
-        .section-title {
-            font-size: 28px;
-            margin-bottom: 20px;
-            border-left: 4px solid #00bcff;
-            padding-left: 10px;
-        }
+.hero p {
+    color: #aeb8c7;
+    font-size: 17px;
+}
 
-        .gallery-display {
-            background: #1e1e1e;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #2d2d2d;
-            margin-top: 10px;
-        }
+/* ===== КАТЕГОРИИ ===== */
 
-        .gallery-title {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #00bcff;
-        }
+.categories {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+}
 
-        .photos-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-            gap: 12px;
-        }
+.category {
+    background: #151e2d;
+    border: 1px solid #263244;
+    border-radius: 16px;
+    padding: 25px 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .photos-list.no-grid {
-            display: block;
-        }
+.category:hover {
+    transform: translateY(-3px);
+    background: #1b283b;
+}
 
-        .photos-list img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            background: #2a2a2a;
-        }
+.category-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
 
-        /* Музыкальный плеер */
-        .music-player {
-            width: 100%;
-            background: #242424;
-            border-radius: 10px;
-            padding: 15px;
-            border: 1px solid #333;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
+.category h2 {
+    font-size: 19px;
+}
 
-        .music-name {
-            color: #ffffff;
-            font-size: 17px;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
+.category p {
+    color: #8f9bad;
+    margin-top: 7px;
+    font-size: 14px;
+}
 
-        .music-player audio {
-            width: 100%;
-            display: block;
-        }
-    </style>
+/* ===== КОНТЕНТ ===== */
+
+#content {
+    margin-top: 30px;
+}
+
+.content-title {
+    font-size: 27px;
+    margin-bottom: 15px;
+    color: #4da3ff;
+}
+
+.card {
+    background: #151e2d;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #263244;
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+.card p {
+    color: #aeb8c7;
+    line-height: 1.5;
+}
+
+/* ===== МУЗЫКАЛЬНЫЙ ПЛЕЕР ===== */
+
+.player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #111827;
+    border-top: 1px solid #263244;
+    padding: 10px 15px;
+    z-index: 150;
+}
+
+.player-title {
+    text-align: center;
+    font-size: 13px;
+    color: #aeb8c7;
+    margin-bottom: 5px;
+}
+
+audio {
+    width: 100%;
+    max-width: 700px;
+    display: block;
+    margin: auto;
+}
+
+/* ===== АДАПТАЦИЯ ===== */
+
+@media (min-width: 700px) {
+
+    .categories {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .hero h1 {
+        font-size: 48px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <!-- Затемнение заднего фона -->
-    <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+<header>
 
-    <!-- Шапка -->
-    <div class="hero-banner">
-        <div class="banner-content">
-            <span class="logo-text">Zheka Hubs</span>
-
-            <button class="menu-btn" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
+    <div class="logo">
+        Zheka Hubs
     </div>
 
-    <!-- Боковое меню -->
-    <div class="side-menu" id="sideMenu">
-
-        <button class="close-btn" onclick="toggleMenu()">×</button>
-
-        <div class="menu-item active" id="btn-my-photos"
-             onclick="changeCategory('my-photos', 'Фотографии')">
-            <span class="menu-item-icon">🖼️</span>
-            <span>Фото</span>
-        </div>
-
-        <div class="menu-item" id="btn-videos"
-             onclick="changeCategory('videos', 'Видеозаписи')">
-            <span class="menu-item-icon">🎬</span>
-            <span>Видео</span>
-        </div>
-
-        <div class="menu-item" id="btn-music"
-             onclick="changeCategory('music', 'Музыка')">
-            <span class="menu-item-icon">🎵</span>
-            <span>Мьюзик</span>
-        </div>
-
-        <div class="menu-item" id="btn-others"
-             onclick="changeCategory('others', 'Разное')">
-            <span class="menu-item-icon">⚙️</span>
-            <span>Всё такое</span>
-        </div>
-
+    <div class="menu-button" onclick="toggleMenu()">
+        ☰
     </div>
 
-    <!-- Основной блок сайта -->
-    <main class="main-content">
+</header>
 
-        <h2 class="section-title">Контент профиля</h2>
 
-        <div class="gallery-display" id="galleryDisplay">
+<!-- БОКОВОЕ МЕНЮ -->
 
-            <h3 class="gallery-title" id="currentAlbumTitle">
-                Фотографии
-            </h3>
+<div class="side-menu" id="sideMenu">
 
-            <div class="photos-list" id="photosContainer">
-                <p style="color: #666;">
-                    В разделе «Фотографии» пока пусто...
-                </p>
+    <button onclick="openCategory('home', 'Главная')">
+        🏠 Главная
+    </button>
+
+    <button onclick="openCategory('photo', 'Фото')">
+        📷 Фото
+    </button>
+
+    <button onclick="openCategory('video', 'Видео')">
+        🎬 Видео
+    </button>
+
+    <button onclick="openCategory('music', 'Музыка')">
+        🎵 Музыка
+    </button>
+
+    <button onclick="openCategory('blog', 'Блог')">
+        📝 Блог
+    </button>
+
+</div>
+
+
+<main>
+
+    <section class="hero">
+
+        <h1>Zheka Hubs</h1>
+
+        <p>
+            Добро пожаловать на мой сайт
+        </p>
+
+    </section>
+
+
+    <!-- КАТЕГОРИИ -->
+
+    <section class="categories">
+
+        <div class="category"
+             onclick="openCategory('photo', 'Фото')">
+
+            <div class="category-icon">
+                📷
             </div>
 
+            <h2>Фото</h2>
+
+            <p>
+                Фотографии и изображения
+            </p>
+
         </div>
 
-    </main>
 
-    <script>
-                    // =========================
-            // ФОТО
-            // =========================
-            if (key === 'my-photos') {
-                items.forEach(src => {
-                    const img = document.createElement('img');
-                    img.src = src;
-                    img.alt = 'Media';
-                    container.appendChild(img);
-                });
-                return;
-            }
+        <div class="category"
+             onclick="openCategory('video', 'Видео')">
 
-            // =========================
-            // МУЗЫКА (Добавили полноценный плеер!)
-            // =========================
-                if (key === 'music') {
-    // Создаем плеер для песни Superhero
-    const audio = document.createElement('audio');
-    audio.src = 'Simon Curtis - Superhero.mp3'; 
-    audio.controls = true;
-    container.appendChild(audio);
-  }
-});
+            <div class="category-icon">
+                🎬
+            </div>
+
+            <h2>Видео</h2>
+
+            <p>
+                Видео и клипы
+            </p>
+
+        </div>
+
+
+        <div class="category"
+             onclick="openCategory('music', 'Музыка')">
+
+            <div class="category-icon">
+                🎵
+            </div>
+
+            <h2>Музыка</h2>
+
+            <p>
+                Музыка и аудио
+            </p>
+
+        </div>
+
+
+        <div class="category"
+             onclick="openCategory('blog', 'Блог')">
+
+            <div class="category-icon">
+                📝
+            </div>
+
+            <h2>Блог</h2>
+
+            <p>
+                Статьи и записи
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- СЮДА ВЫВОДИТСЯ КОНТЕНТ -->
+
+    <section id="content">
+
+        <h2 class="content-title">
+            Главная
+        </h2>
+
+        <div class="card">
+
+            <h3>
+                Zheka Hubs
+            </h3>
+
+            <p>
+                Это мой личный сайт.
+                Здесь будут собираться фотографии,
+                видео, музыка и записи блога.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- МУЗЫКАЛЬНЫЙ ПЛЕЕР -->
+
+<div class="player">
+
+    <div class="player-title">
+        🎵 Simon Curtis — Superhero
+    </div>
+
+    <audio controls>
+
+        <source
+            src="Simon Curtis - Superhero.mp3"
+            type="audio/mpeg">
+
+        Ваш браузер не поддерживает аудио.
+
+    </audio>
+
+</div>
+
+
+<script>
+
+/* ===== МЕНЮ ===== */
+
+function toggleMenu() {
+
+    const menu = document.getElementById("sideMenu");
+
+    menu.classList.toggle("active");
+
+}
+
+
+/* ===== КАТЕГОРИИ ===== */
+
+function openCategory(key, displayName) {
+
+    const content =
+        document.getElementById("content");
+
+    const menu =
+        document.getElementById("sideMenu");
+
+    menu.classList.remove("active");
+
+
+    let html = "";
+
+    if (key === "home") {
+
+        html = `
+            <h2 class="content-title">
+                Главная
+            </h2>
+
+            <div class="card">
+
+                <h3>Zheka Hubs</h3>
+
+                <p>
+                    Добро пожаловать на сайт!
+                </p>
+
+            </div>
+        `;
+
+    }
+
+
+    else if (key === "photo") {
+
+        html = `
+            <h2 class="content-title">
+                📷 Фото
+            </h2>
+
+            <div class="card">
+
+                <h3>Фотографии</h3>
+
+                <p>
+                    Здесь будут размещаться
+                    фотографии.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+
+    else if (key === "video") {
+
+        html = `
+            <h2 class="content-title">
+                🎬 Видео
+            </h2>
+
+            <div class="card">
+
+                <h3>Видео</h3>
+
+                <p>
+                    Здесь будут размещаться
+                    видео и клипы.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+
+    else if (key === "music") {
+
+        html = `
+            <h2 class="content-title">
+                🎵 Музыка
+            </h2>
+
+            <div class="card">
+
+                <h3>
+                    Simon Curtis — Superhero
+                </h3>
+
+                <p>
+                    Музыкальный трек сайта.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+
+    else if (key === "blog") {
+
+        html = `
+            <h2 class="content-title">
+                📝 Блог
+            </h2>
+
+            <div class="card">
+
+                <h3>
+                    Первая запись
+                </h3>
+
+                <p>
+                    Здесь будут появляться
+                    записи блога.
+                </p>
+
+            </div>
+        `;
+
+    }
+
+
+    content.innerHTML = html;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
 </script>
+
+</body>
+        </html>
