@@ -47,6 +47,24 @@ header {
     user-select: none;
 }
 
+/* ===== СТИЛИ ДЛЯ БАННЕРА (ИСПРАВЛЕНО) ===== */
+
+.main-banner-container {
+    max-width: 900px;
+    margin: 20px auto 0;
+    padding: 0 15px;
+}
+
+.main-banner {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 14px;
+    border: 1px solid #263244;
+    display: block;
+}
+
 /* ===== БОКОВОЕ МЕНЮ ===== */
 
 .side-menu {
@@ -86,14 +104,14 @@ header {
 /* ===== ОСНОВНАЯ ОБЛАСТЬ ===== */
 
 main {
-    padding: 25px 15px 110px;
+    padding: 10px 15px 110px;
     max-width: 900px;
     margin: auto;
 }
 
 .hero {
     text-align: center;
-    padding: 35px 10px;
+    padding: 25px 10px;
 }
 
 .hero h1 {
@@ -229,7 +247,12 @@ audio {
         ☰
     </div>
 
-</header> {img src="banner.jpg alt="Баннер"gt.}
+</header>
+
+<!-- БАННЕР (ИСПРАВЛЕНО И ПОЧИНЕНО) -->
+<div class="main-banner-container">
+    <img src="banner.jpeg" alt="Баннер профиля" class="main-banner">
+</div>
 
 
 <!-- БОКОВОЕ МЕНЮ -->
@@ -543,3 +566,4 @@ function openCategory(key, displayName) {
 
 </body>
         </html>
+        
